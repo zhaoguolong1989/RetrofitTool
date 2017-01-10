@@ -5,7 +5,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -18,7 +17,6 @@ import com.github.rxjava.rxbus.MySubscriber;
 import com.test.retrofit.request.api.ApiRequest;
 import com.test.retrofit.request.entity.TestBean;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 map.put("other","sf阿里打发生");
 //                map.put("area","");
                 map.put("fromToRoom","1-2");
-                map.put("token","dcbe7e75834a48938845fc3c540e15a8");
+                map.put("token","删除内部接口防止外部调用");
                 map.put("custCode","C38170000048");
                 map.put("reqType","rent");
                 map.put("acreage","0-50");
@@ -153,12 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.login:
                 map=new HashMap<String,String>();
                 map.put("equipmentName","HUAWEI%20HN3-U01");
-                map.put("username","qinqi02");
-                map.put("appSys","android");
-                map.put("source","agencyApp");
-                map.put("appModel","864572010933342");
-                map.put("password",getSuperPwd());
-                map.put("version","28.0");
+                //此处内部接口删除，无法使用
                 ApiRequest.login(map).subscribe(new MySubscriber<String>() {
                     @Override
                     public void onMyNext(String obj) {
@@ -175,26 +168,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
         }
     }
-    private String getSuperPwd() {
-        String trim = "qinqi02";
-        String year = Calendar.getInstance().get(Calendar.YEAR) + "";
-        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-        String m = month + "";
-        if (month < 10) {
-            m = "0" + month;
-        }
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        String datStr = day + "";
-        if (day < 10) {
-            datStr = "0" + day;
-        }
-        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        String h = hour + "";
-        if (hour < 10) {
-            h = "0" + hour;
-        }
-        String pwd = trim.substring(0, 1).toUpperCase() + "n1need" + year + m + datStr + h;
-        Log.i("pwd", "pwd---" + pwd);
-        return pwd;
-    }
+
 }
