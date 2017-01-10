@@ -16,7 +16,7 @@ import com.github.retrofitutil.MyLog;
 import com.github.retrofitutil.NoNetworkException;
 import com.github.rxjava.rxbus.MySubscriber;
 import com.test.retrofit.request.api.ApiRequest;
-import com.test.retrofit.request.entity.dataBean;
+import com.test.retrofit.request.entity.TestBean;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 Map<String,String>map=new HashMap<String, String>();
-                ApiRequest.getData(withCach, map).subscribe(new Subscriber<dataBean>() {
+                ApiRequest.getData(withCach, map).subscribe(new Subscriber<TestBean>() {
                     @Override
                     public void onCompleted() {
                         MyLog.i("onCompleted");
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                     @Override
-                    public void onNext(dataBean o) {
+                    public void onNext(TestBean o) {
                         MyLog.i(o.toString());
                         content.setText(o.toString());
                     }

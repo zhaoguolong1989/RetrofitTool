@@ -1,6 +1,6 @@
 package com.test.retrofit.request.api;
 
-import com.test.retrofit.request.entity.dataBean;
+import com.test.retrofit.request.entity.TestBean;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ import rx.Observable;
  */
 public interface IRequest {
     @GET("top250")//top250-chart
-    Observable<dataBean>  getTestData();
+    Observable<TestBean>  getTestData();
     @GET("top250")
     Observable<String>  getTestDataForString();
 

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2017/1/9.
  */
-public class dataBean {
+public class TestBean {
 
     /**
      * count : 20
