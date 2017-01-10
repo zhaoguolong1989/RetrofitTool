@@ -41,11 +41,11 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 // 项目引用的版本号，比如compile 'com.yanzhenjie:andserver:1.0.1'中的1.0.1就是这里配置的。
-version = jcenter_version as String
+version = "1.0.1" //jcenter_version as String
 
 // 定义两个链接，下面会用到。
-def siteUrl = jcenter_siteUrl as String    //项目主页  project homepage
-def gitUrl = jcenter_gitUrl  as String//  Git仓库的url project git
+def siteUrl = "https://github.com/2380253499/RetrofitTool"//jcenter_siteUrl as String    //项目主页  project homepage
+def gitUrl = "https://github.com/2380253499/RetrofitTool.git"//jcenter_gitUrl  as String//  Git仓库的url project git
 // 唯一包名，比如compile 'com.yanzhenjie:andserver:1.0.1'中的com.yanzhenjie就是这里配置的。
 group = "com.github"//jcenter_package as String
 install {
@@ -126,7 +126,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "customview"  // 上传到maven库。
-        name = "customview"  // 发布到Bintray上的项目名字，这里的名字不是compile 'com.yanzhenjie:andserver:1.0.1'中的andserver。
+        name = "RetrofitTool" //jcenter_package_name as String  // 发布到Bintray上的项目名字，这里的名字不是compile 'com.yanzhenjie:andserver:1.0.1'中的andserver。
         userOrg = 'zhongrui' // Bintray的用户名，2016年11月更新。
         websiteUrl = siteUrl
         vcsUrl = gitUrl
