@@ -1,7 +1,7 @@
 package com.test.retrofit.request.api;
 
 import com.github.retrofitutil.NetWorkManager;
-import com.test.retrofit.request.entity.DataBean;
+import com.test.retrofit.request.entity.dataBean;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class ApiRequest {
     protected static Retrofit getClient(boolean withCach){
         return withCach?NetWorkManager.getWithCacheClient():NetWorkManager.getCommonClient();
     }
-    public static Observable<DataBean> getData(boolean withCach,Map<String, String> map) {
+    public static Observable<dataBean> getData(boolean withCach,Map<String, String> map) {
         return getClient(withCach)
                 .create(IRequest.class)
                 .getTestData()
