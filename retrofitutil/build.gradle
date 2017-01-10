@@ -20,6 +20,19 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
+//    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.1'
+    //retrofit网络请求
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    //Rxjava for android
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+    //替掉默认从all, 用rxjava做转换器
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    //gson转换器
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    //Scalars (primitives, boxed, and String)
+    compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    //logger
+    compile 'com.orhanobut:logger:1.15'
 }
