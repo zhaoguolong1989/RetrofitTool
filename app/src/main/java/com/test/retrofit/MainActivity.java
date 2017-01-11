@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.github.retrofitutil.MyLog;
 import com.github.retrofitutil.NoNetworkException;
-import com.github.retrofitutil.RetrofitCallack;
+import com.github.retrofitutil.RetrofitCallBack2;
 import com.github.rxjava.rxbus.MySubscriber;
 import com.test.retrofit.request.api.ApiRequest;
 import com.test.retrofit.request.entity.TestBean;
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 map.put("appModel", "864572010933342");
                 map.put("password", getSuperPwd());
                 map.put("version", "28.0");
-                /*ApiRequest.generalLoginObj(map, new RetrofitCallack<LoginBean>() {
+                /*ApiRequest.generalLoginObj(map, new RetrofitCallBack2<LoginBean>() {
                     @Override
                     protected void onSuccess(LoginBean response) {
                         content.setText(response.getContent().getAvatarUrl());
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         content.setText("error");
                     }
                 });*/
-               ApiRequest.generalLog(map, new RetrofitCallack<String>() {
+               ApiRequest.generalLog(map, new RetrofitCallBack2<String>() {
                    @Override
                    protected void onSuccess(String response) {
                        content.setText(response);

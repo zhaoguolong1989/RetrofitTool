@@ -14,9 +14,9 @@ import retrofit2.Response;
 /**
  * Created by Administrator on 2017/1/11.
  */
-public abstract class RetrofitCallBack<T> implements Callback {
+public abstract class RetrofitCallBack2<T> implements Callback {
     Type mType;
-    public RetrofitCallBack(){
+    public RetrofitCallBack2(){
         mType = getSuperclassTypeParameter(getClass());
     }
     static Type getSuperclassTypeParameter(Class<?> subclass){
