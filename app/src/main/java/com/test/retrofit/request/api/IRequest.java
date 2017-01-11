@@ -31,6 +31,7 @@ public interface IRequest {
     @FormUrlEncoded
     @POST("mobile/login")
     Call<String> generalLogin(@FieldMap Map<String,String> map);
+
     @FormUrlEncoded
     @POST("mobile/login")
     Call<LoginBean> generalLoginObj(@FieldMap Map<String,String> map);

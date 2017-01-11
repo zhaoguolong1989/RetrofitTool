@@ -14,18 +14,15 @@ import android.widget.Toast;
 
 import com.github.retrofitutil.MyLog;
 import com.github.retrofitutil.NoNetworkException;
+import com.github.retrofitutil.RetrofitCallack;
 import com.github.rxjava.rxbus.MySubscriber;
 import com.test.retrofit.request.api.ApiRequest;
 import com.test.retrofit.request.entity.TestBean;
-import com.test.retrofit.response.LoginBean;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import rx.Subscriber;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -167,25 +164,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 map.put("appModel", "864572010933342");
                 map.put("password", getSuperPwd());
                 map.put("version", "28.0");
-                    ApiRequest.generalLoginObj(map,new Callback<LoginBean>() {
-                        @Override
-                        public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
-
-                        }
-                        @Override
-                        public void onFailure(Call<LoginBean> call, Throwable t) {
-                        }
-                    });
-               /*ApiRequest.generalLog(map, new ResultCallBack<String>() {
+                /*ApiRequest.generalLoginObj(map, new RetrofitCallack<LoginBean>() {
+                    @Override
+                    protected void onSuccess(LoginBean response) {
+                        content.setText(response.getContent().getAvatarUrl());
+                    }
+                    @Override
+                    protected void onError(Throwable t) {
+                        content.setText("error");
+                    }
+                });*/
+               ApiRequest.generalLog(map, new RetrofitCallack<String>() {
                    @Override
-                   public void success(String o) {
-                       content.setText(o);
+                   protected void onSuccess(String response) {
+                       content.setText(response);
                    }
+
                    @Override
-                   public void error(Throwable t) {
+                   protected void onError(Throwable t) {
                        content.setText("error");
                    }
-                });*/
+               });
 
                 /*ApiRequest.login(map).subscribe(new MySubscriber<String>() {
                     @Override
