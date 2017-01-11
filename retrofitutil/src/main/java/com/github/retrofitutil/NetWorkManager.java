@@ -1,6 +1,7 @@
 package com.github.retrofitutil;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -25,9 +26,22 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  * Created by Administrator on 2017/1/9.
  */
 public class NetWorkManager {
+    /*** 结合Rxjava使用,返回对象,无缓存*/
     private static Retrofit commonClient;
+    /*** 结合Rxjava使用,返回对象,有缓存*/
+    private static Retrofit commonWithCacheClient;
+    /*** 结合Rxjava使用,返回String,无缓存*/
     private static Retrofit stringClient;
-    private static Retrofit withCacheClient;
+    /*** 结合Rxjava使用,返回String,有缓存*/
+    private static Retrofit stringWithCacheClient;
+    /*** 普通client不与Rxjava结合,返回对象,无缓存*/
+    private static Retrofit generalClient;
+    /*** 普通client不与Rxjava结合,返回对象,有缓存*/
+    private static Retrofit generalWithCachClient;
+    /*** 普通client不与Rxjava结合,返回String,无缓存*/
+    private static Retrofit generalStringClient;
+    /*** 普通client不与Rxjava结合,返回String,有缓存*/
+    private static Retrofit generalStringWithCachClient;
     private static String baseUrl;
     private static Context context;
     private static File httpCacheDirectory;//= new File(context.getCacheDir(), "MyRetrofitCache");
@@ -100,7 +114,26 @@ public class NetWorkManager {
         }
         return commonClient;
     }
-
+    /**
+     * 带缓存的客户端(返回对象)
+     *
+     * @return
+     */
+    public static Retrofit getCommonWithCacheClient() {
+        if (commonWithCacheClient == null) {
+            synchronized (NetWorkManager.class) {
+                if (commonWithCacheClient == null) {
+                    commonWithCacheClient = new Retrofit.Builder()
+                            .baseUrl(baseUrl)
+                            .client(getHttpClient(true))
+                            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                }
+            }
+        }
+        return commonWithCacheClient;
+    }
     /**
      * 返回String的客户端(不带缓存)
      *
@@ -123,26 +156,116 @@ public class NetWorkManager {
     }
 
     /**
-     * 带缓存的客户端(返回对象)
-     *
+     * 返回String的客户端(带缓存)
      * @return
      */
-    public static Retrofit getWithCacheClient() {
-        if (withCacheClient == null) {
+    public static Retrofit getStringWithCacheClient() {
+        if (stringWithCacheClient == null) {
             synchronized (NetWorkManager.class) {
-                if (withCacheClient == null) {
-                    withCacheClient = new Retrofit.Builder()
+                if (stringWithCacheClient == null) {
+                    stringWithCacheClient = new Retrofit.Builder()
                             .baseUrl(baseUrl)
                             .client(getHttpClient(true))
                             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .build();
+                }
+            }
+        }
+        return stringWithCacheClient;
+    }
+
+    /**
+     * 普通client不与Rxjava结合,返回对象,无缓存
+     * @return
+     */
+    public static Retrofit getGeneralClient() {
+        if (generalClient == null) {
+            synchronized (NetWorkManager.class) {
+                if (generalClient == null) {
+                    try {
+                        generalClient = new Retrofit.Builder()
+                                .baseUrl(baseUrl)
+                                .client(getHttpClientNoRxJava(false))
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+                    }catch (Exception e){
+                        if(e instanceof NoNetworkException){
+                            Toast.makeText(context,"NoNetworkException",Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(context,"else",Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                }
+            }
+        }
+        return generalClient;
+    }
+
+    /**
+     *普通client不与Rxjava结合,返回对象,有缓存
+     * @return
+     */
+    public static Retrofit getGeneralWithCachClient() {
+        if (generalWithCachClient == null) {
+            synchronized (NetWorkManager.class) {
+                if (generalWithCachClient == null) {
+                    generalWithCachClient = new Retrofit.Builder()
+                            .baseUrl(baseUrl)
+                            .client(getHttpClient(true))
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
                 }
             }
         }
-        return withCacheClient;
+        return generalWithCachClient;
     }
 
+    /**
+     * 普通client不与Rxjava结合,返回String,无缓存
+     * @return
+     */
+    public static Retrofit getGeneralStringClient() {
+        if (generalStringClient == null) {
+            synchronized (NetWorkManager.class) {
+                if (generalStringClient == null) {
+                    generalStringClient = new Retrofit.Builder()
+                            .baseUrl(baseUrl)
+                            .client(getHttpClient(false))
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .build();
+                }
+            }
+        }
+        return generalStringClient;
+    }
+
+    /**
+     * 普通client不与Rxjava结合,返回String,有缓存
+     * @return
+     */
+    public static Retrofit getGeneralStringWithCachClient() {
+        if (generalStringWithCachClient == null) {
+            synchronized (NetWorkManager.class) {
+                if (generalStringWithCachClient == null) {
+                    generalStringWithCachClient = new Retrofit.Builder()
+                            .baseUrl(baseUrl)
+                            .client(getHttpClient(true))
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .build();
+                }
+            }
+        }
+        return generalStringWithCachClient;
+    }
+
+
+    /*private static File httpCacheDirectory ;//= new File(context.getCacheDir(), "MyRetrofitCache");
+        private static int cacheSize = 10 * 1024 * 1024; // 10 MiB
+        private static Cache cache = new Cache(httpCacheDirectory, cacheSize);*/
+    private static final String CACHE_CONTROL = "Cache-Control";
+    private static  Interceptor rewrite_cache_control_interceptor;
     private static OkHttpClient getHttpClient(final boolean hasCache) {
         Interceptor interceptor = new Interceptor() {
             @Override
@@ -199,9 +322,66 @@ public class NetWorkManager {
         return okHttpClient.build();
     }
 
-    /*private static File httpCacheDirectory ;//= new File(context.getCacheDir(), "MyRetrofitCache");
-    private static int cacheSize = 10 * 1024 * 1024; // 10 MiB
-    private static Cache cache = new Cache(httpCacheDirectory, cacheSize);*/
-    private static final String CACHE_CONTROL = "Cache-Control";
-    private static  Interceptor rewrite_cache_control_interceptor;
+
+    /**
+     * 此处的拦截器主要因为检查网络抛异常无法像Rxjava那样自动进入error方法中,这里需要手动捕获异常,所以需要另写一个拦截器
+     * @param hasCache
+     * @return
+     * @throws Exception
+     */
+    private static OkHttpClient getHttpClientNoRxJava(final boolean hasCache) throws Exception{
+        Interceptor interceptor = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request request = chain.request();
+                if(!hasCache){//没有使用缓存时才判断有无网络连接
+                    NetworkMonitor networkMonitor=new NetworkMonitor(context);
+                    if (!networkMonitor.isConnected()) {
+                        throw new NoNetworkException(noNetworkExceptionMsg);
+                    }
+                }
+                if (isDebug) {
+                    long t1 = System.nanoTime();
+                    Response response = chain.proceed(request);
+                    long t2 = System.nanoTime();
+                    double time = (t2 - t1) / 1e6d;
+                    String bodyStr = response.body().string();
+                    String msg = "\nurl-->" + request.url()
+                            + "\ntime-->" + time
+                            + "ms\nheaders-->" + request.headers()
+                            + "\nresponse code-->" + response.code()
+                            + "\nresponse headers-->" + response.headers()
+                            + "\nbody-->" +bodyStr;
+
+                    if (request.method().equals("GET")) {
+                        Logger.i("GET"+msg);//
+                    } else if (request.method().equals("POST")) {
+                        Request copyRequest = request.newBuilder().build();
+                        if (copyRequest.body() instanceof FormBody) {
+                            Buffer buffer = new Buffer();
+                            copyRequest.body().writeTo(buffer);
+                            Logger.i("request params:" + buffer.readUtf8());
+                        }
+                        Logger.i("POST"+msg);
+                    } else if (request.method().equals("PUT")) {
+                        Logger.i("PUT"+msg);
+                    } else if (request.method().equals("DELETE")) {
+                        Logger.i("DELETE"+msg);
+                    }
+                }
+                return chain.proceed(request);
+            }
+        };
+
+        OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(NetConstant.HTTP_CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(NetConstant.HTTP_READ_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(NetConstant.HTTP_WRITE_TIMEOUT, TimeUnit.SECONDS);
+        if (hasCache) {
+            okHttpClient.addNetworkInterceptor(rewrite_cache_control_interceptor);
+            okHttpClient.cache(cache);
+        }
+        okHttpClient.addInterceptor(interceptor);
+        return okHttpClient.build();
+    }
 }
