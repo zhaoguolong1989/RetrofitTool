@@ -36,7 +36,7 @@ dependencies{
 ---
 以下传参以map为例(还可以传对象,具体用法可以参考Retrofit官网)
 ####不结合Rxjava使用方法
-IRequest.java
+IRequest.java(注意,这是一个接口,所以没有方法体)
 ```
 @FormUrlEncoded
 @POST("mobile/login")
@@ -72,7 +72,7 @@ ApiRequest.login(map, new RetrofitCallBack<T>() {
 ```
 ---
 ####结合Rxjava使用方法
-IRequest.java
+IRequest.java(注意,这是一个接口,所以没有方法体)
 ```
 @FormUrlEncoded
 @POST("mobile/login")
