@@ -47,9 +47,9 @@ ApiRequest.java
 ```
 public static void login(Map<String,String> map,final Callback<LoginBean> callBack){
         Call<LoginBean> call =  NetWorkManager.getGeneralClient()
-	                 	.create(IRequest.class)
-	                 	.generalLogin(map);
-        		call.enqueue(callBack);
+	                 			.create(IRequest.class)
+	                 			.generalLogin(map);
+        call.enqueue(callBack);
 }
 ```
 Activity
