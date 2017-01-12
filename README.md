@@ -5,10 +5,10 @@
 首先在Application里面初始化
 
 NetWorkManager.init(Context ctx,String baseUrl);
-NetWorkManager.init(Context ctx, String url,int cachTime, String noNetworkMsg, boolean debugFlag)
+NetWorkManager.init(Context ctx,String baseUrl,int cachTime, String noNetworkMsg, boolean debugFlag)
 ctx-->上下文
 baseUrl-->ip+端口号之类的前缀,以/结尾
-cachTime-->请求接口设置有效的缓存时间(默认为60秒)
+cachTime-->设置数据的有效缓存时间(默认为60秒)
 noNetworkMsg-->无网络连接时的文字提示(默认为“无网络连接,请检查之后再试”)
 debugFlag-->是否是debug模式(true:debug)主要在debug模式下打印请求的参数以及请求头和返回结果(默认为true)
 
