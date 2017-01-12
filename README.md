@@ -31,3 +31,69 @@ dependencies{
     compile 'com.github:retrofitutil:最新版本号看上面的蓝色小图片'
 }
 ```
+---
+以下传参以map为例(还可以传对象,具体用法可以参考Retrofit官网)
+####不结合Rxjava使用方法
+IRequest.java
+```
+@FormUrlEncoded
+@POST("mobile/login")
+Call<LoginBean> generalLogin(@FieldMap Map<String,String> map);
+
+@GET("mobile/login")
+Call<LoginBean> generalLogin(@QueryMap Map<String,String> map);
+```
+ApiRequest.java
+```
+public static void login(Map<String,String> map,final Callback<LoginBean> callBack){
+        Call<LoginBean> call = NetWorkManager.getGeneralClient()
+	                 .create(IRequest.class)
+	                 .generalLogin(map);
+        call.enqueue(callBack);
+}
+```
+Activity
+```
+ApiRequest.login(map, new RetrofitCallBack<T>() {
+     @Override
+     protected void onSuccess(T response) {
+         
+     }
+     @Override
+     protected void onError(Throwable t) {
+         
+     }
+});
+```
+---
+####结合Rxjava使用方法
+IRequest.java
+```
+@FormUrlEncoded
+@POST("mobile/login")
+Observable<T> generalLogin(@FieldMap Map<String,String> map);
+```
+ApiRequest.java
+```
+public static Observable<T> login(Map<String,String> map){
+     return NetWorkManager.getCommonClient()
+	        .create(IRequest.class)
+            .generalLogin(map)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread());
+}
+```
+Activity
+```
+ApiRequest.login(map).subscribe(new Subscriber<T>() {
+	    @Override
+	    public void onCompleted() {
+	    }
+	    @Override
+	    public void onError(Throwable e) {
+	    }
+	    @Override
+	    public void onNext(T s) {
+	    }
+})
+```
