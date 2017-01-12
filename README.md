@@ -46,10 +46,10 @@ Call<LoginBean> generalLogin(@QueryMap Map<String,String> map);
 ApiRequest.java
 ```
 public static void login(Map<String,String> map,final Callback<LoginBean> callBack){
-        Call<LoginBean> call = NetWorkManager.getGeneralClient()
-	                 .create(IRequest.class)
-	                 .generalLogin(map);
-        call.enqueue(callBack);
+        Call<LoginBean> call =  NetWorkManager.getGeneralClient()
+	                 	.create(IRequest.class)
+	                 	.generalLogin(map);
+        		call.enqueue(callBack);
 }
 ```
 Activity
@@ -93,7 +93,7 @@ ApiRequest.login(map).subscribe(new Subscriber<T>() {
 	    public void onError(Throwable e) {
 	    }
 	    @Override
-	    public void onNext(T s) {
+	    public void onNext(T response) {
 	    }
 })
 ```
