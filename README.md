@@ -26,9 +26,9 @@ debugFlag-->是否是debug模式(true:debug)主要在debug模式下打印请求�
     NetWorkManager.getGeneralStringWithCachClient();返回String有缓存
     
     至于这里为什么提供这么多客户端,动态设置不行吗?之前我也想过,具体不多做解释,实践之后就会了解的
-```
-[ ![Download](https://api.bintray.com/packages/zhongrui/customview/RetrofitTool/images/download.svg) ](https://bintray.com/zhongrui/customview/RetrofitTool/_latestVersion)
 
+[ ![Download](https://api.bintray.com/packages/zhongrui/customview/RetrofitTool/images/download.svg) ](https://bintray.com/zhongrui/customview/RetrofitTool/_latestVersion)
+```
 dependencies{
     compile 'com.github:retrofitutil:最新版本号看上面的蓝色小图片'
 }
