@@ -17,9 +17,9 @@ debugFlag-->是否是debug模式(true:debug)主要在debug模式下打印请求�
     NetWorkManager.getCommonWithCacheClient();返回对象或者集合有缓存
     NetWorkManager.getStringClient();返回String无缓存
     NetWorkManager.getStringWithCacheClient();返回String有缓存
-    ---------------↑结合Rxjava使用的客户端---------------------------------------
-    
-    ---------------↓不结合Rxjava使用的客户端--------------------------------------
+    ---------------↑结合Rxjava使用的客户端----------------------------------------
+    
+    ---------------↓不结合Rxjava使用的客户端--------------------------------------
     NetWorkManager.getGeneralClient();返回对象或者集合无缓存
     NetWorkManager.getGeneralWithCachClient();返回对象或者集合有缓存
     NetWorkManager.getGeneralStringClient();返回String无缓存
