@@ -49,8 +49,11 @@ public static void login(Map<String,String> map,final Callback<LoginBean> callBa
         Call<LoginBean> call =  NetWorkManager.getGeneralClient()
 	                 			.create(IRequest.class)
 	                 			.generalLogin(map);
-        call.enqueue(callBack);
+        call.enqueue(callBack);//异步请求
 }
+call.enqueue(callBack);		 //异步请求
+call.execute().body();		 //同步请求-返回对象
+call.execute().body().toString();//同步请求-返回String
 ```
 Activity
 ```
