@@ -2,7 +2,6 @@ package com.github.retrofitutil;
 
 import android.content.Context;
 
-import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;
@@ -26,8 +25,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 public class NetWorkManager {
     private static int HTTP_CONNECT_TIMEOUT = 15;
-    private static int HTTP_WRITE_TIMEOUT = 6;
-    private static int HTTP_READ_TIMEOUT = 8;
+    private static int HTTP_WRITE_TIMEOUT = 20;
+    private static int HTTP_READ_TIMEOUT = 20;
     /***
      * 结合Rxjava使用,返回对象,无缓存
      */
@@ -63,38 +62,94 @@ public class NetWorkManager {
     private static String baseUrl;
     private static Context context;
     private static File httpCacheDirectory;//= new File(context.getCacheDir(), "MyRetrofitCache");
-    private static int cacheSize;//= 10 * 1024 * 1024; // 10 MiB
     private static Cache cache;//= new Cache(httpCacheDirectory, cacheSize);
     private static String noNetworkExceptionMsg;
-    private static boolean isDebug;
+    private static boolean isDebug=true;
 
-    /**
-     * 必须在application中初始化和设置baseurl，拿到Context(设置缓存需要使用)
-     *
-     * @param ctx
+    /*缓存时间默认60秒*/
+    private int cachTime=60;
+    /*缓存数据大小,默认20MB 20*1024*1024*/
+    private int cacheSize=20 * 1024 * 1024;
+    /*无网络提示语*/
+    private String noNetworkMsg="无网络连接,请稍后再试";
+
+    /***
+     * @param cachTime 设置缓存时间，默认60秒
+     * @return
      */
-    public static void init(Context ctx, String url) {
-        init(ctx, url, 60, "无网络连接,请检查之后再试", true);
+    public NetWorkManager setCachTime(int cachTime){
+        this.cachTime=cachTime;
+        return this;
     }
-
-    /**
-     * @param ctx          上下文
-     * @param url          ip+端口
-     * @param cachTime     缓存有效时间(秒)
-     * @param noNetworkMsg 无网络连接提示语
-     * @param debugFlag    是否是debug模式 true-debug,false-release
+    /***
+     * @param noNetworkMsg 设置无网络提示语
+     * @return
      */
-    public static void init(Context ctx, String url, final int cachTime, String noNetworkMsg, boolean debugFlag) {
-        Logger.init("MyLog")
-                .methodCount(1)
-                .logLevel(debugFlag ? LogLevel.FULL : LogLevel.NONE)
-                .methodCount(3);
+    public NetWorkManager setNoNetWorkMsg(String noNetworkMsg){
+        this.noNetworkMsg=noNetworkMsg;
+        return this;
+    }
+    /***
+     * @param debugFlag 默认true为debug模式,release需要设置为false
+     * @return
+     */
+    public NetWorkManager setDebugFlag(boolean debugFlag){
+        this.isDebug=debugFlag;
+        return this;
+    }
+    /***
+     * @param cacheSize 设置缓存数据大小，默认20MB  20*1024*1024
+     * @return
+     */
+    public NetWorkManager setCacheSize(int cacheSize){
+        this.cacheSize=cacheSize;
+        return this;
+    }
+    /***
+     * @param httpConnectTimeout 设置请求超时时间,默认15秒
+     * @return
+     */
+    public NetWorkManager setHttpConnectTimeout(int httpConnectTimeout) {
+        HTTP_CONNECT_TIMEOUT = httpConnectTimeout;
+        return this;
+    }
+    /***
+     * @param httpReadTimeout 设置写入时间,默认20秒
+     * @return
+     */
+    public NetWorkManager setHttpReadTimeout(int httpReadTimeout) {
+        HTTP_READ_TIMEOUT = httpReadTimeout;
+        return this;
+    }
+    /***
+     * @param httpWriteTimeout 设置读取时间,默认20秒
+     * @return
+     */
+    public NetWorkManager setHttpWriteTimeout(int httpWriteTimeout) {
+        HTTP_WRITE_TIMEOUT = httpWriteTimeout;
+        return this;
+    }
+    /**
+     *
+     * @param ctx 上下文
+     * @param url baseUrl:ip+端口
+     * @param isDebug 是否是debug模式 true-debug,false-release
+     * @return
+     */
+    public static NetWorkManager getInstance(Context ctx, String url,boolean isDebug){
+        return new NetWorkManager(ctx,url,isDebug);
+    }
+    private NetWorkManager(Context ctx, String url,boolean isDebug) {
+        /*Logger.init("MyLog")
+                .logLevel(isDebug ? LogLevel.FULL : LogLevel.NONE)
+                .methodCount(3);*/
+        this.isDebug=isDebug;
         context = ctx;
         baseUrl = url;
-        isDebug = debugFlag;
+    }
+    public void complete(){
         noNetworkExceptionMsg = noNetworkMsg;
         httpCacheDirectory = new File(context.getCacheDir(), "MyRetrofitCache");
-        cacheSize = 50 * 1024 * 1024; // 10 MiB
         cache = new Cache(httpCacheDirectory, cacheSize);
         rewrite_cache_control_interceptor = new Interceptor() {
             @Override
@@ -110,19 +165,6 @@ public class NetWorkManager {
             }
         };
     }
-
-    private NetWorkManager() {
-    }
-    public static void setHttpConnectTimeout(int httpConnectTimeout) {
-        HTTP_CONNECT_TIMEOUT = httpConnectTimeout;
-    }
-    public static void setHttpReadTimeout(int httpReadTimeout) {
-        HTTP_READ_TIMEOUT = httpReadTimeout;
-    }
-    public static void setHttpWriteTimeout(int httpWriteTimeout) {
-        HTTP_WRITE_TIMEOUT = httpWriteTimeout;
-    }
-
     /**
      * 常规的客户端(返回对象,默认不带缓存)
      *

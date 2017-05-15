@@ -11,7 +11,7 @@ public class BaseApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        NetWorkManager.init(this,"http://61.152.255.241:8082/sales-web/");
+        NetWorkManager.getInstance(this,"http://61.152.255.241:8082/sales-web/",true);
     }
 
 }
