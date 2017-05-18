@@ -356,6 +356,7 @@ public class NetWorkManager {
                     double time = (t2 - t1) / 1e6d;
                     String bodyStr = response.body().string();
                     String msg = "%s\nurl->" + request.url()
+                            + "\nparamstag"
                             + "\ntime->" + time
                             + "ms\nheaders->" + request.headers()
                             + "\nresponse code->" + response.code()
@@ -367,10 +368,12 @@ public class NetWorkManager {
                     } else if (request.method().equals("POST")) {
                         Request copyRequest = request.newBuilder().build();
                         if (copyRequest.body() instanceof FormBody) {
-                            Buffer buffer = new Buffer();
-                            copyRequest.body().writeTo(buffer);
-                            Logger.i("request params:" + buffer.readUtf8());
+
                         }
+                        Buffer buffer = new Buffer();
+                        copyRequest.body().writeTo(buffer);
+//                        Logger.i("request params:" + buffer.readUtf8());
+                        msg=msg.replace("paramstag","request params:"+buffer.readUtf8());
                         Logger.i(msg, "POST");
                     } else if (request.method().equals("PUT")) {
                         Logger.i(msg, "PUT");
@@ -418,6 +421,7 @@ public class NetWorkManager {
                     double time = (t2 - t1) / 1e6d;
                     String bodyStr = response.body().string();
                     String msg = "%s\nurl->" + request.url()
+                            + "\nparamstag"
                             + "\ntime->" + time
                             + "ms\nheaders->" + request.headers()
                             + "\nresponse code->" + response.code()
@@ -429,10 +433,12 @@ public class NetWorkManager {
                     } else if (request.method().equals("POST")) {
                         Request copyRequest = request.newBuilder().build();
                         if (copyRequest.body() instanceof FormBody) {
-                            Buffer buffer = new Buffer();
-                            copyRequest.body().writeTo(buffer);
-                            Logger.i("request params:" + buffer.readUtf8());
+
                         }
+                        Buffer buffer = new Buffer();
+                        copyRequest.body().writeTo(buffer);
+//                        Logger.i("request params:" + buffer.readUtf8());
+                        msg=msg.replace("paramstag","request params:"+buffer.readUtf8());
                         Logger.i(msg, "POST");
                     } else if (request.method().equals("PUT")) {
                         Logger.i(msg, "PUT");
