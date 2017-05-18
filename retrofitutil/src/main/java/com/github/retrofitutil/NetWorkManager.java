@@ -2,6 +2,7 @@ package com.github.retrofitutil;
 
 import android.content.Context;
 
+import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Cache;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -140,9 +142,9 @@ public class NetWorkManager {
         return new NetWorkManager(ctx,url,isDebug);
     }
     private NetWorkManager(Context ctx, String url,boolean isDebug) {
-        /*Logger.init("MyLog")
+        Logger.init("MyLog")
                 .logLevel(isDebug ? LogLevel.FULL : LogLevel.NONE)
-                .methodCount(3);*/
+                .methodCount(3);
         this.isDebug=isDebug;
         context = ctx;
         baseUrl = url;
@@ -353,15 +355,15 @@ public class NetWorkManager {
                     long t2 = System.nanoTime();
                     double time = (t2 - t1) / 1e6d;
                     String bodyStr = response.body().string();
-                    String msg = "\nurl-->" + request.url()
-                            + "\ntime-->" + time
-                            + "ms\nheaders-->" + request.headers()
-                            + "\nresponse code-->" + response.code()
-                            + "\nresponse headers-->" + response.headers()
-                            + "\nbody-->" + bodyStr;
+                    String msg = "%s\nurl->" + request.url()
+                            + "\ntime->" + time
+                            + "ms\nheaders->" + request.headers()
+                            + "\nresponse code->" + response.code()
+                            + "\nresponse headers->" + response.headers()
+                            + "\nbody->" + bodyStr;
 
                     if (request.method().equals("GET")) {
-                        Logger.i("GET" + msg);//
+                        Logger.i(msg, "GET");
                     } else if (request.method().equals("POST")) {
                         Request copyRequest = request.newBuilder().build();
                         if (copyRequest.body() instanceof FormBody) {
@@ -369,14 +371,21 @@ public class NetWorkManager {
                             copyRequest.body().writeTo(buffer);
                             Logger.i("request params:" + buffer.readUtf8());
                         }
-                        Logger.i("POST" + msg);
+                        Logger.i(msg, "POST");
                     } else if (request.method().equals("PUT")) {
-                        Logger.i("PUT" + msg);
+                        Logger.i(msg, "PUT");
                     } else if (request.method().equals("DELETE")) {
-                        Logger.i("DELETE" + msg);
+                        Logger.i(msg, "DELETE");
                     }
+                    MediaType mediaType = response.body().contentType();
+                    return response.newBuilder()
+                            .body(okhttp3.ResponseBody.create(mediaType, bodyStr))
+                            .build();
+                }else{
+                    return chain.proceed(request);
                 }
-                return chain.proceed(request);
+
+
             }
         };
 
@@ -408,15 +417,15 @@ public class NetWorkManager {
                     long t2 = System.nanoTime();
                     double time = (t2 - t1) / 1e6d;
                     String bodyStr = response.body().string();
-                    String msg = "\nurl-->" + request.url()
-                            + "\ntime-->" + time
-                            + "ms\nheaders-->" + request.headers()
-                            + "\nresponse code-->" + response.code()
-                            + "\nresponse headers-->" + response.headers()
-                            + "\nbody-->" + bodyStr;
+                    String msg = "%s\nurl->" + request.url()
+                            + "\ntime->" + time
+                            + "ms\nheaders->" + request.headers()
+                            + "\nresponse code->" + response.code()
+                            + "\nresponse headers->" + response.headers()
+                            + "\nbody->" + bodyStr;
 
                     if (request.method().equals("GET")) {
-                        Logger.i("GET" + msg);//
+                        Logger.i(msg, "GET");
                     } else if (request.method().equals("POST")) {
                         Request copyRequest = request.newBuilder().build();
                         if (copyRequest.body() instanceof FormBody) {
@@ -424,14 +433,22 @@ public class NetWorkManager {
                             copyRequest.body().writeTo(buffer);
                             Logger.i("request params:" + buffer.readUtf8());
                         }
-                        Logger.i("POST" + msg);
+                        Logger.i(msg, "POST");
                     } else if (request.method().equals("PUT")) {
-                        Logger.i("PUT" + msg);
+                        Logger.i(msg, "PUT");
                     } else if (request.method().equals("DELETE")) {
-                        Logger.i("DELETE" + msg);
+                        Logger.i(msg, "DELETE");
                     }
+
+                    MediaType mediaType = response.body().contentType();
+                    return response.newBuilder()
+                            .body(okhttp3.ResponseBody.create(mediaType, bodyStr))
+                            .build();
+                }else{
+                    return chain.proceed(request);
                 }
-                return chain.proceed(request);
+
+
             }
         };
 
